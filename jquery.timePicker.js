@@ -202,6 +202,7 @@
     startTime: new Date(0, 0, 0, 0, 0, 0),
     endTime: new Date(0, 0, 0, 23, 30, 0),
     separator: ':',
+    leadingZeros: false,
     show24Hours: true
   };
 
@@ -221,14 +222,15 @@
   }
 
   function formatTime(time, settings) {
-    var h = time.getHours();
-    var hours = settings.show24Hours ? h : (((h + 11) % 12) + 1);
-    var minutes = time.getMinutes();
-    return formatNumber(hours) + settings.separator + formatNumber(minutes) + (settings.show24Hours ? '' : ((h < 12) ? ' AM' : ' PM'));
-  }
-
-  function formatNumber(value) {
-    return (value < 10 ? '0' : '') + value;
+    var h = time.getHours(),
+        hours = settings.show24Hours ? h : (((h + 11) % 12) + 1),
+        minutes = time.getMinutes();
+    
+    // pad with zeros if necessary
+    minutes = (minutes < 10 ? '0' : '') + minutes;
+    hours = (hours < 10 && settings.leadingZeros ? '0' : '') + hours;
+        
+    return hours + settings.separator + minutes + (settings.show24Hours ? '' : ((h < 12) ? ' AM' : ' PM'));
   }
 
   function timeToDate(input, settings) {
