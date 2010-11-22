@@ -72,6 +72,7 @@
     }).click(function() {
       setTimeVal(elm, this, $tpDiv, settings);
       tpOver = false;
+      if (settings.blurOnSelect) elm.blur();
     });
 
     var showPicker = function() {
@@ -203,7 +204,8 @@
     endTime: new Date(0, 0, 0, 23, 30, 0),
     separator: ':',
     leadingZeros: false,
-    show24Hours: true
+    show24Hours: true,
+    blurOnSelect: false
   };
 
   // Private functions.
