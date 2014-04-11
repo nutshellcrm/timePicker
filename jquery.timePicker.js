@@ -44,13 +44,15 @@
     }
 
     var $tpDiv = $('<div class="time-picker'+ (settings.show24Hours ? '' : ' time-picker-12hours') +'"></div>');
+    var $tpScrollable = $('<div class="time-picker-container"></div>');
+    $tpDiv.append($tpScrollable);
     var $tpList = $('<ul></ul>');
 
     // Build the list.
     for(var i = 0; i < times.length; i++) {
       $tpList.append("<li>" + times[i] + "</li>");
     }
-    $tpDiv.append($tpList);
+    $tpScrollable.append($tpList);
     // Append the timPicker to the body and position it.
     $tpDiv.appendTo('body').hide();
 
@@ -64,7 +66,7 @@
 
     $("li", $tpList).mouseover(function() {
       if (!keyDown) {
-        $("li.selected", $tpDiv).removeClass("selected");
+        $("li.selected", $tpScrollable).removeClass("selected");
         $(this).addClass("selected");
       }
     }).mousedown(function() {
@@ -133,7 +135,7 @@
     $(elm)[event](function(e) {
       var $selected;
       keyDown = true;
-      var top = $tpDiv[0].scrollTop;
+      var top = $tpScrollable[0].scrollTop;
       switch (e.keyCode) {
         case 38: // Up arrow.
           // Just show picker if it's hidden.
@@ -146,14 +148,14 @@
             $selected.removeClass("selected");
             // Scroll item into view.
             if (prev.offsetTop < top) {
-              $tpDiv[0].scrollTop = top - prev.offsetHeight;
+              $tpScrollable[0].scrollTop = top - prev.offsetHeight;
             }
           }
           else {
             // Loop to next item.
             $selected.removeClass("selected");
             prev = $("li:last", $tpList).addClass("selected")[0];
-            $tpDiv[0].scrollTop = prev.offsetTop - prev.offsetHeight;
+            $tpScrollable[0].scrollTop = prev.offsetTop - prev.offsetHeight;
           }
           return false;
           break;
@@ -165,14 +167,14 @@
           var next = $selected.next().addClass("selected")[0];
           if (next) {
             $selected.removeClass("selected");
-            if (next.offsetTop + next.offsetHeight > top + $tpDiv[0].offsetHeight) {
-              $tpDiv[0].scrollTop = top + next.offsetHeight;
+            if (next.offsetTop + next.offsetHeight > top + $tpScrollable[0].offsetHeight) {
+              $tpScrollable[0].scrollTop = top + next.offsetHeight;
             }
           }
           else {
             $selected.removeClass("selected");
             next = $("li:first", $tpList).addClass("selected")[0];
-            $tpDiv[0].scrollTop = 0;
+            $tpScrollable[0].scrollTop = 0;
           }
           return false;
           break;
