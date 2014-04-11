@@ -180,6 +180,8 @@
           if ($tpDiv.is(":visible")) {
             var sel = $("li.selected", $tpList)[0];
             setTimeVal(elm, sel, $tpDiv, settings);
+            //blurring the timepicker also closes it.
+            elm.blur();
           }
           return false;
           break;
