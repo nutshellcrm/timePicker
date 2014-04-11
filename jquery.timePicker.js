@@ -99,9 +99,20 @@
       var $matchedTime = $("li:contains(" + formatTime(roundTime, settings) + ")", $tpDiv);
 
       if ($matchedTime.length) {
-        $matchedTime.addClass("selected");
-        // Scroll to matched time.
-        $tpDiv[0].scrollTop = $matchedTime[0].offsetTop;
+        //1:00 - 1:45 (because of duplicates 1'1:00' - 1'1:45')
+        if ($matchedTime.length > 1 && $matchedTime[0].innerHTML == formatTime(roundTime, settings)) {
+          $($matchedTime[0]).addClass("selected");
+          $tpScrollable[0].scrollTop = $matchedTime[0].offsetTop;
+        }
+        //2:00 - 2:45 (same deal)
+        else if ($matchedTime.length > 1 && $matchedTime[1].innerHTML == formatTime(roundTime, settings)) {
+          $($matchedTime[1]).addClass("selected");
+          $tpScrollable[0].scrollTop = $matchedTime[1].offsetTop;
+        }
+        else {
+          $matchedTime.addClass("selected");
+          $tpScrollable[0].scrollTop = $matchedTime[0].offsetTop;
+        }
       }
       return true;
     };
