@@ -184,11 +184,14 @@
             setTimeVal(elm, sel, $tpDiv, settings);
             //blurring the timepicker also closes it.
             elm.blur();
+            //called here because the timepicker is hidden before the keyup event can trigger
+            keyDown = false;
           }
           return false;
           break;
         case 27: // Esc
           $tpDiv.hide();
+          keyDown = false;
           return false;
           break;
       }
