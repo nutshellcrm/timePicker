@@ -31,6 +31,7 @@
 
     var tpOver = false;
     var keyDown = false;
+    var timeOnOpen = elm.value;
     var startTime = timeToDate(settings.startTime, settings);
     var endTime = timeToDate(settings.endTime, settings);
 
@@ -90,6 +91,9 @@
       // Show picker. This has to be done before scrollTop is set since that
       // can't be done on hidden elements.
       $tpDiv.show();
+
+      //store time shown when timepicker was opened.
+      timeOnOpen = elm.value;
 
       // Try to find a time in the list that matches the entered time.
       var time = elm.value ? timeStringToDate(elm.value, settings) : startTime;
@@ -180,8 +184,13 @@
           break;
         case 13: // Enter
           if ($tpDiv.is(":visible")) {
-            var sel = $("li.selected", $tpList)[0];
-            setTimeVal(elm, sel, $tpDiv, settings);
+
+            if (elm.value != timeOnOpen && !tpOver)
+              $(elm).change();
+            else {
+              var sel = $("li.selected", $tpList)[0];
+              setTimeVal(elm, sel, $tpDiv, settings);
+            }
             //blurring the timepicker also closes it.
             elm.blur();
             //called here because the timepicker is hidden before the keyup event can trigger
