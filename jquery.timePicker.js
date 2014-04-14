@@ -51,7 +51,9 @@
 
     // Build the list.
     for(var i = 0; i < times.length; i++) {
-      $tpList.append("<li>" + times[i] + "</li>");
+      var listItem = $("<li>" + times[i] + "</li>");
+      listItem.data('time', times[i]);
+      $tpList.append(listItem);
     }
     $tpScrollable.append($tpList);
     // Append the timPicker to the body and position it.
@@ -102,24 +104,15 @@
       var steps = Math.round(min / settings.step);
       var roundTime = normaliseTime(new Date(0, 0, 0, 0, (steps * settings.step + startMin), 0));
       roundTime = (startTime < roundTime && roundTime <= endTime) ? roundTime : startTime;
-      var $matchedTime = $("li:contains(" + formatTime(roundTime, settings) + ")", $tpDiv);
+      var $matchedTime = $tpDiv.find('li').filter(function() {
+        return ($(this).data('time') == formatTime(roundTime, settings));
+      });
 
       if ($matchedTime.length) {
-        //1:00 - 1:45 (because of duplicates 1'1:00' - 1'1:45')
-        if ($matchedTime.length > 1 && $matchedTime[0].innerHTML == formatTime(roundTime, settings)) {
-          $($matchedTime[0]).addClass("selected");
-          $tpScrollable[0].scrollTop = $matchedTime[0].offsetTop;
-        }
-        //2:00 - 2:45 (same deal)
-        else if ($matchedTime.length > 1 && $matchedTime[1].innerHTML == formatTime(roundTime, settings)) {
-          $($matchedTime[1]).addClass("selected");
-          $tpScrollable[0].scrollTop = $matchedTime[1].offsetTop;
-        }
-        else {
-          $matchedTime.addClass("selected");
-          $tpScrollable[0].scrollTop = $matchedTime[0].offsetTop;
-        }
+        $matchedTime.addClass("selected");
+        $tpScrollable[0].scrollTop = $matchedTime[0].offsetTop;
       }
+
       return true;
     };
     // Attach to click as well as focus so timePicker can be shown again when
