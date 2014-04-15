@@ -104,8 +104,9 @@
       var steps = Math.round(min / settings.step);
       var roundTime = normaliseTime(new Date(0, 0, 0, 0, (steps * settings.step + startMin), 0));
       roundTime = (startTime < roundTime && roundTime <= endTime) ? roundTime : startTime;
+      var formattedTime = formatTime(roundTime, settings);
       var $matchedTime = $tpDiv.find('li').filter(function() {
-        return ($(this).data('time') == formatTime(roundTime, settings));
+        return ($(this).data('time') == formattedTime);
       });
 
       if ($matchedTime.length) {
